@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		441304A023F3D0AB00A4A19E /* AstronomyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4413049F23F3D0AB00A4A19E /* AstronomyTests.swift */; };
 		441304A823F3D11B00A4A19E /* NetworkDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441304A723F3D11B00A4A19E /* NetworkDataLoader.swift */; };
+		441304AA23F3D21700A4A19E /* URLSeesionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441304A923F3D21700A4A19E /* URLSeesionExtension.swift */; };
 		9DBD20092140D1300047905E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBD20082140D1300047905E /* AppDelegate.swift */; };
 		9DBD20102140D1300047905E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DBD200F2140D1300047905E /* Assets.xcassets */; };
 		9DBD20132140D1300047905E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9DBD20112140D1300047905E /* LaunchScreen.storyboard */; };
@@ -42,6 +43,7 @@
 		4413049F23F3D0AB00A4A19E /* AstronomyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyTests.swift; sourceTree = "<group>"; };
 		441304A123F3D0AB00A4A19E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		441304A723F3D11B00A4A19E /* NetworkDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataLoader.swift; sourceTree = "<group>"; };
+		441304A923F3D21700A4A19E /* URLSeesionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSeesionExtension.swift; sourceTree = "<group>"; };
 		9DBD20052140D1300047905E /* Astronomy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Astronomy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DBD20082140D1300047905E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DBD200F2140D1300047905E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			children = (
 				9DBD20312140DE100047905E /* URL+Secure.swift */,
 				441304A723F3D11B00A4A19E /* NetworkDataLoader.swift */,
+				441304A923F3D21700A4A19E /* URLSeesionExtension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				9DBD20322140DE100047905E /* URL+Secure.swift in Sources */,
 				9DBD201C2140D19D0047905E /* ImageCollectionViewCell.swift in Sources */,
 				9DBD202D2140D38C0047905E /* Cache.swift in Sources */,
+				441304AA23F3D21700A4A19E /* URLSeesionExtension.swift in Sources */,
 				9DBD20342140DF1D0047905E /* PhotosCollectionViewController.swift in Sources */,
 				441304A823F3D11B00A4A19E /* NetworkDataLoader.swift in Sources */,
 				9DFE494C2145D37A0009922B /* PhotoDetailViewController.swift in Sources */,
