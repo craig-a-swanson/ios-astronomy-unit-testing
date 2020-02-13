@@ -40,13 +40,48 @@ class AstronomyTests: XCTestCase {
         
         let photoResultsExpectation = expectation(description: "Wait for photo results")
         
-        marsRoverClient.fetchPhotos(from: rover!, onSol: 1) { (possibleData, possibleError) in
+        marsRoverClient.fetchPhotos(from: rover!, onSol: 2) { (possibleData, possibleError) in
             photoResultsExpectation.fulfill()
             photos = possibleData!
         }
         wait(for: [photoResultsExpectation], timeout: 5)
-        print(photos.count)
-        XCTAssertTrue(photos.count > 0)
+        XCTAssertTrue(photos.count == 74)
+    }
+    
+    func testForValidMockData() {
+        
+        let mock = MockLoader()
+        var rover: MarsRover?
+        var photos: [MarsPhotoReference] = []
+        mock.data = validRoverJSON
+        
+        let marsRoverClient = MarsRoverClient(dataLoader: mock)
+        
+        let roverResultsExpectation = expectation(description: "Wait for rover results")
+        
+        marsRoverClient.fetchMarsRover(named: "curiosity") { (possibleRover, possibleError) in
+            roverResultsExpectation.fulfill()
+            if let error = possibleError {
+                print("Error fetching rover \(error)")
+                return
+            }
+            rover = possibleRover
+        }
+        wait(for: [roverResultsExpectation], timeout: 2)
+        
+        XCTAssertTrue(rover?.maxSol == 10)
+        
+        mock.data = validSol1JSON
+        
+        let photoResultsExpectation = expectation(description: "Wait for photo results")
+        
+        marsRoverClient.fetchPhotos(from: rover!, onSol: 1) { (possibleData, possibleError) in
+            photoResultsExpectation.fulfill()
+            
+            photos = possibleData!
+        }
+        wait(for: [photoResultsExpectation], timeout: 2)
+        XCTAssertTrue(photos.count == 16)
     }
 
 }
