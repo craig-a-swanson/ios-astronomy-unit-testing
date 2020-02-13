@@ -10,6 +10,35 @@ import Foundation
 
 class MarsRoverClient {
     
+    private let baseURL = URL(string: "https://api.nasa.gov/mars-photos/api/v1")!
+    private let apiKey = "qzGsj0zsKk6CA9JZP1UjAbpQHabBfaPg2M5dGMB7"
+    let dataLoader: NetworkDataLoader
+    
+    init(dataLoader: NetworkDataLoader = URLSession.shared) {
+        self.dataLoader = dataLoader
+    }
+
+    private func url(forInfoForRover roverName: String) -> URL {
+        var url = baseURL
+        url.appendPathComponent("manifests")
+        url.appendPathComponent(roverName)
+        let urlComponents = NSURLComponents(url: url, resolvingAgainstBaseURL: true)!
+        urlComponents.queryItems = [URLQueryItem(name: "api_key", value: apiKey)]
+        return urlComponents.url!
+    }
+    
+    private func url(forPhotosfromRover roverName: String, on sol: Int) -> URL {
+        var url = baseURL
+        url.appendPathComponent("rovers")
+        url.appendPathComponent(roverName)
+        url.appendPathComponent("photos")
+        let urlComponents = NSURLComponents(url: url, resolvingAgainstBaseURL: true)!
+        urlComponents.queryItems = [URLQueryItem(name: "sol", value: String(sol)),
+                                    URLQueryItem(name: "api_key", value: apiKey)]
+        return urlComponents.url!
+    }
+    
+    
     func fetchMarsRover(named name: String,
                         using session: URLSession = URLSession.shared,
                         completion: @escaping (MarsRover?, Error?) -> Void) {
@@ -17,7 +46,7 @@ class MarsRoverClient {
         let url = self.url(forInfoForRover: name)
         fetch(from: url, using: session) { (dictionary: [String : MarsRover]?, error: Error?) in
 
-            guard let rover = dictionary?["photoManifest"] else {
+            guard let rover = dictionary?["photo_manifest"] else {
                 completion(nil, error)
                 return
             }
@@ -45,13 +74,15 @@ class MarsRoverClient {
     private func fetch<T: Codable>(from url: URL,
                            using session: URLSession = URLSession.shared,
                            completion: @escaping (T?, Error?) -> Void) {
-        session.dataTask(with: url) { (data, response, error) in
-            if let error = error {
+        
+            self.dataLoader.loadData(from: url) { (possibleData, possibleError) in
+                
+            if let error = possibleError {
                 completion(nil, error)
                 return
             }
             
-            guard let data = data else {
+            guard let data = possibleData else {
                 completion(nil, NSError(domain: "com.LambdaSchool.Astronomy.ErrorDomain", code: -1, userInfo: nil))
                 return
             }
@@ -63,29 +94,6 @@ class MarsRoverClient {
             } catch {
                 completion(nil, error)
             }
-        }.resume()
-    }
-    
-    private let baseURL = URL(string: "https://api.nasa.gov/mars-photos/api/v1")!
-    private let apiKey = "qzGsj0zsKk6CA9JZP1UjAbpQHabBfaPg2M5dGMB7"
-
-    private func url(forInfoForRover roverName: String) -> URL {
-        var url = baseURL
-        url.appendPathComponent("manifests")
-        url.appendPathComponent(roverName)
-        let urlComponents = NSURLComponents(url: url, resolvingAgainstBaseURL: true)!
-        urlComponents.queryItems = [URLQueryItem(name: "api_key", value: apiKey)]
-        return urlComponents.url!
-    }
-    
-    private func url(forPhotosfromRover roverName: String, on sol: Int) -> URL {
-        var url = baseURL
-        url.appendPathComponent("rovers")
-        url.appendPathComponent(roverName)
-        url.appendPathComponent("photos")
-        let urlComponents = NSURLComponents(url: url, resolvingAgainstBaseURL: true)!
-        urlComponents.queryItems = [URLQueryItem(name: "sol", value: String(sol)),
-                                    URLQueryItem(name: "api_key", value: apiKey)]
-        return urlComponents.url!
+        }
     }
 }
