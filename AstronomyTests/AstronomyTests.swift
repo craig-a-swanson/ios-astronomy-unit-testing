@@ -11,24 +11,42 @@ import XCTest
 
 class AstronomyTests: XCTestCase {
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+    // Does decoding work?
+    // Does decoding fail when given bad data?
+    // Does it build the correct URL?
+    // Does it build the correct URLRequest?
+    // Are the results saved properly?
+    // Is completion handler called if the networking fails
+    // is completion handler called if the data is bad?  and if the data is good?
+    
+    func testForSomeNetworkResults() {
+        
+        let marsRoverClient = MarsRoverClient()
+        var rover: MarsRover?
+        var photos: [MarsPhotoReference] = []
+        
+        let roverResultsExpectation = expectation(description: "Wait for rover Rover results")
+        
+        marsRoverClient.fetchMarsRover(named: "curiosity") { (possibleRover, possibleError) in
+            roverResultsExpectation.fulfill()
+            if let error = possibleError {
+                print("Error fetching rover \(error)")
+                return
+            }
+            rover = possibleRover
         }
+        wait(for: [roverResultsExpectation], timeout: 5)
+        XCTAssertNotNil(rover)
+        
+        let photoResultsExpectation = expectation(description: "Wait for photo results")
+        
+        marsRoverClient.fetchPhotos(from: rover!, onSol: 1) { (possibleData, possibleError) in
+            photoResultsExpectation.fulfill()
+            photos = possibleData!
+        }
+        wait(for: [photoResultsExpectation], timeout: 5)
+        print(photos.count)
+        XCTAssertTrue(photos.count > 0)
     }
 
 }
